@@ -4,13 +4,11 @@ import styles from '../styles/Home.module.css'
 import SearchableSelect from '../components/SearchableSelect'
 import React, { useState } from 'react'
 
-
 const options = [
   { value: 'chocolate', label: 'Chocolate' },
   { value: 'strawberry', label: 'Strawberry' },
   { value: 'vanilla', label: 'Vanilla' }
 ]
-
 
 
 export default function Home() {
@@ -27,16 +25,17 @@ export default function Home() {
     setValue(e.value)
   }
 
-
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <form
+      className={styles.tickerForm}
+       onSubmit={handleSubmit}>
 
         <SearchableSelect
           options={options}
           handleChange={handleChange}
         />
-        <button>Submit</button>
+        <button className={styles.submitButton}>Submit</button>
       </form>
     </div>
   )
