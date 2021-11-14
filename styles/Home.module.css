@@ -1,10 +1,12 @@
 .container {
-  margin-top: 20vh;
+  margin-top: 12%;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: rgb(255,255,255);
+  background: radial-gradient(circle, rgb(199, 243, 241) 1%, rgba(0,182,245,1) 40%);
 }
 
 .resContainer {
@@ -13,11 +15,16 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  margin-bottom: 50vh;
+  margin-bottom: 20vh;
   font-size: x-large;
 }
 
-
+.title {
+  position: relative;
+  font-size: 3em;
+  font-weight: 800;
+  margin-bottom: 1em
+}
 
 .tickerForm {
   width: 50vh;
@@ -28,7 +35,9 @@
 .tickerFormSelect {
   align-self: center;
   margin-bottom: 2vh;
-  width: 50%;
+  width: 80%;
+  border-radius: 5px;
+  background-color: white;
 }
 
 .tickerForm button {
@@ -56,6 +65,16 @@
   font-size: 2em;
   text-align: center;
   color: red;
+}
+
+.uncertain {
+  font-size: 2em;
+  text-align: center;
+  color: gold;
+}
+
+.hiddenText {
+  display: none;
 }
 
 .infoHeader {
