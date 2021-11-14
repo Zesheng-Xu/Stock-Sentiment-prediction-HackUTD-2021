@@ -2,12 +2,39 @@ import styles from "../styles/Home.module.css";
 import Card from "react-bootstrap/Card";
 import ticker from "../data/ticker.json";
 
+function decisionStyling(decision, attribute) {
+  if (attribute == "border") {
+    switch (decision) {
+      case "BUY":
+        return "success";
+      case "SELL":
+        return "danger";
+      case "UNCERTAIN":
+        return "warning";
+      default:
+        return "secondary";
+    }
+  } else if (attribute == "text") {
+    switch (decision) {
+      case "BUY":
+        return styles.buy;
+      case "SELL":
+        return styles.sell;
+      case "UNCERTAIN":
+        return styles.uncertain;
+      default:
+        return styles.hiddenText;
+    }
+  }
+  return;
+}
+
 export default function ResultsChild(props) {
   return (
     <div className={styles.resContainer}>
       <Card
-        border={props.decision == "BUY" ? "success" : "danger"}
-        style={{ width: "30rem", borderWidth: "3px"}}
+        border={decisionStyling(props.decision, "border")}
+        style={{ width: "30rem", borderWidth: "3px" }}
       >
         <Card.Body>
           <Card.Title className={styles.nameName}>
@@ -17,7 +44,8 @@ export default function ResultsChild(props) {
           <Card.Subtitle className={styles.infoHeader}>
             Stock Price
           </Card.Subtitle>
-          <Card.Text className={styles.infoBody}>$ {props.stock}</Card.Text>
+          <Card.Text className={styles.infoBody}>$
+          {props.stock}</Card.Text>
           <Card.Subtitle className={styles.infoHeader}>
             Stock Weighting
           </Card.Subtitle>
@@ -30,9 +58,7 @@ export default function ResultsChild(props) {
             Sentiment/Social Media
           </Card.Subtitle>
           <Card.Text className={styles.infoBody}>Positive</Card.Text>
-          <Card.Title
-            className={props.decision == "BUY" ? styles.buy : styles.sell}
-          >
+          <Card.Title className={decisionStyling(props.decision, "text")}>
             {props.decision}
           </Card.Title>
         </Card.Body>
