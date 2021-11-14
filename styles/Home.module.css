@@ -1,8 +1,19 @@
 .container {
+  margin-top: 20vh;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.resContainer {
+  height: 100vh;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 50vh;
 }
 
 .tickerForm {
@@ -12,7 +23,6 @@
 .tickerForm button {
   margin-top: 2vh;
   width: 50vh;
-  height: 4vh;
 }
 
 .nameTicker {
