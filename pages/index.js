@@ -7,6 +7,7 @@ import companyNames from '../data/names.json'
 import tickers from '../data/tickers.json'
 import tickerLookup from '../data/name.json'
 import Results from '../components/Results'
+import Button from "react-bootstrap/Button"
 
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
 
   
   const handleSubmit = (evt) => {
+    console.log("help");
     evt.preventDefault();
     
     if(type == "name") {
@@ -44,7 +46,7 @@ export default function Home() {
         className={styles.tickerForm}
         onSubmit={handleSubmit}>
         
-        <label for="searchType">Ticker or Name: </label>
+        <label htmlFor="searchType">Ticker or Name: </label>
         <select name="search" id="searchType" onChange={handleTypeChange}>
          <option value="ticker">Ticker</option>
          <option value="name">Company Name</option>
@@ -56,7 +58,7 @@ export default function Home() {
           }
           handleChange={handleChange}
         />
-        <button className={styles.submitButton}>Submit</button>
+        <Button type="submit" variant="info" className={styles.submitButton}>Submit</Button>
       </form>
 
       {

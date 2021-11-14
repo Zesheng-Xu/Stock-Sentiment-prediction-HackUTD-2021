@@ -1,15 +1,28 @@
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import styles from '../styles/Home.module.css'
+import styles from "../styles/Home.module.css";
 import { db } from "../firebase";
-import Link from 'next/link'
+import React, { useEffect, useState } from "react";
+import Card from "react-bootstrap/Card";
+
+const initData = {
+  Decision: 0,
+  'Sentiment relevance': 0,
+  'Sentiment score': 0,
+  Stock: 0
+};
+
+const [data, setData] = useState(initData)
 
 // Get a list of companies from your database
-async function getCompanies() {
+async function sendTickerToDB(ticker) {
   var companiesRef = db.ref("companies");
-  companiesRef.on("value", (snapshot) => {
+  // reading data:
+  /*companiesRef.on("value", (snapshot) => {
     const data = snapshot.val();
+    console.log(data);
+  });*/
+  companiesRef.child(ticker).set(data);
+  companiesRef.child(ticker).on('value', (snapshot) => {
+    setData(snapshot.val());
     console.log(data);
   });
 }
@@ -17,18 +30,38 @@ async function getCompanies() {
 const rec = "BUY";
 
 export default function Results(props) {
+  useEffect(() => {
+    sendTickerToDB(props.ticker);
+  });
+
   return (
-    <div className={styles.resContainer} id={getCompanies()}>
-      <h2 className={styles.nameTicker}>Name/TICKER {props.ticker}</h2>
-      <h1 className={rec == "BUY" ? styles.buy : styles.sell}>{rec}</h1>
-      <p className={styles.infoHeader}>Stock Price</p>
-      <p className={styles.infoBody}>$50.00</p>
-      <p className={styles.infoHeader}>Stock Weighting</p>
-      <p className={styles.infoBody}>10</p>
-      <p className={styles.infoHeader}>Market Cap</p>
-      <p className={styles.infoBody}>1T</p>
-      <p className={styles.infoHeader}>Sentiment/Social Media</p>
-      <p className={styles.infoBody}>Positive</p>
+    <div className={styles.resContainer}>
+      <Card style={{ width: "18rem" }}>
+        <Card.Body>
+          <Card.Title className={styles.nameTicker}>
+            Name/TICKER {props.ticker}
+          </Card.Title>
+          <Card.Title className={rec == "BUY" ? styles.buy : styles.sell}>
+            {rec}
+          </Card.Title>
+          <Card.Subtitle className={styles.infoHeader}>
+            Stock Price
+          </Card.Subtitle>
+          <Card.Text className={styles.infoBody}>$ {data.Stock}</Card.Text>
+          <Card.Subtitle className={styles.infoHeader}>
+            Stock Weighting
+          </Card.Subtitle>
+          <Card.Text className={styles.infoBody}>10</Card.Text>
+          <Card.Subtitle className={styles.infoHeader}>
+            Market Cap
+          </Card.Subtitle>
+          <Card.Text className={styles.infoBody}>1T</Card.Text>
+          <Card.Subtitle className={styles.infoHeader}>
+            Sentiment/Social Media
+          </Card.Subtitle>
+          <Card.Text className={styles.infoBody}>Positive</Card.Text>
+        </Card.Body>
+      </Card>
     </div>
   );
 }
