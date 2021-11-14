@@ -1,4 +1,23 @@
 .container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tickerForm {
+  width: 50vh;
+}
+
+.tickerForm button {
+  margin-top: 2vh;
+  width: 50vh;
+  height: 4vh;
+}
+
+
+
+/* .container {
   padding: 0 2rem;
 }
 
@@ -113,4 +132,4 @@
     width: 100%;
     flex-direction: column;
   }
-}
+} */
