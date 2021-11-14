@@ -18,7 +18,7 @@ const rec = "BUY";
 
 export default function Results(props) {
   return (
-    <div id={getCompanies()}>
+    <div className={styles.resContainer} id={getCompanies()}>
       <h2 className={styles.nameTicker}>Name/TICKER {props.ticker}</h2>
       <h1 className={rec == "BUY" ? styles.buy : styles.sell}>{rec}</h1>
       <p className={styles.infoHeader}>Stock Price</p>
@@ -29,7 +29,6 @@ export default function Results(props) {
       <p className={styles.infoBody}>1T</p>
       <p className={styles.infoHeader}>Sentiment/Social Media</p>
       <p className={styles.infoBody}>Positive</p>
-      <Link href="./"><a>Back</a></Link>
     </div>
   );
 }

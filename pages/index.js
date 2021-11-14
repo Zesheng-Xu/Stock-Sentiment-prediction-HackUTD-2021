@@ -6,31 +6,32 @@ import React, { useState } from 'react'
 import companyNames from '../data/names.json'
 import tickers from '../data/tickers.json'
 import tickerLookup from '../data/name.json'
-
-/*const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-]*/
-
+import Results from '../components/Results'
 
 
 export default function Home() {
 
   const [value, setValue] = useState("")
   const [type, setType] = useState("ticker")
+  const [isResult, setResult] = useState(false)
+  const [ticker, setTicker] = useState("")
 
+  
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    const submitVal = value
+    
     if(type == "name") {
-      submitVal = tickerLookup[value]["Symbol"]
+      setTicker(tickerLookup[value]["Symbol"])
+    } else {
+      setTicker(value)
     }
     //will handle submission of user's selected ticker
+    setResult(true)
   }
 
   const handleChange = e => {
     setValue(e.value)
+    setResult(false)
   }
 
   const handleTypeChange = e => {
@@ -57,6 +58,11 @@ export default function Home() {
         />
         <button className={styles.submitButton}>Submit</button>
       </form>
+
+      {
+        (isResult)? (<Results ticker={ticker}/>) : (<div 
+        className={styles.resContainer}></div>) 
+      }
     </div>
   )
 }
