@@ -7,7 +7,7 @@ export default function ResultsChild(props) {
     <div className={styles.resContainer}>
       <Card
         border={props.decision == "BUY" ? "success" : "danger"}
-        style={{ width: "18rem", borderWidth: "3px" }}
+        style={{ width: "30rem", borderWidth: "3px"}}
       >
         <Card.Body>
           <Card.Title className={styles.nameName}>
