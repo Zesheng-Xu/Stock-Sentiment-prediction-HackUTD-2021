@@ -10,8 +10,6 @@ const initData = {
   Stock: 0
 };
 
-const [data, setData] = useState(initData)
-
 // Get a list of companies from your database
 async function sendTickerToDB(ticker) {
   var companiesRef = db.ref("companies");
@@ -30,6 +28,7 @@ async function sendTickerToDB(ticker) {
 const rec = "BUY";
 
 export default function Results(props) {
+  const [data, setData] = useState(initData)
   useEffect(() => {
     sendTickerToDB(props.ticker);
   });
