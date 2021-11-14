@@ -15,6 +15,28 @@
   height: 4vh;
 }
 
+.nameTicker {
+  text-align: center;
+}
+
+.buy {
+  text-align: center;
+  color: green;
+}
+
+.sell {
+  text-align: center;
+  color: red;
+}
+
+.infoHeader {
+  margin-left: 20px;
+  font-weight: 500;
+}
+
+.infoBody {
+  margin-left: 40px;
+}
 
 
 /* .container {
