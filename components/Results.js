@@ -21,7 +21,6 @@ async function listenForData(ticker, setData) {
   var companiesRef = db.ref("companies")
   companiesRef.child(ticker).on('value', (snapshot) => {
     setData(snapshot.val())
-    console.log(snapshot.val())
   });
 }
 
@@ -34,7 +33,6 @@ export default function Results(props) {
   useEffect(() => {
     sendTickerToDB(props.ticker)
     listenForData(props.ticker, setData)
-    console.log("Called use effect")
   }, []);
 
   return (
@@ -42,9 +40,8 @@ export default function Results(props) {
       <ResultsChild
         ticker={props.ticker}
         decision={data.Decision}
+        stock={data.Stock}
       />
-
-      {console.log(data)}
     </div>
 
   );

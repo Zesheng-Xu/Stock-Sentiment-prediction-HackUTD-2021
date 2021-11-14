@@ -1,23 +1,23 @@
 import styles from "../styles/Home.module.css";
-import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
+import ticker from "../data/ticker.json";
 
 export default function ResultsChild(props) {
-  
   return (
     <div className={styles.resContainer}>
-      <Card style={{ width: "18rem" }}>
+      <Card
+        border={props.decision == "BUY" ? "success" : "danger"}
+        style={{ width: "18rem", borderWidth: "3px" }}
+      >
         <Card.Body>
-          <Card.Title className={styles.nameTicker}>
-            Name/TICKER {props.ticker}
+          <Card.Title className={styles.nameName}>
+            {ticker[props.ticker]["Name"]}
           </Card.Title>
-          <Card.Title className={props.decision == "BUY" ? styles.buy : styles.sell}>
-            {props.decision}
-          </Card.Title>
+          <Card.Title className={styles.nameTicker}>{props.ticker}</Card.Title>
           <Card.Subtitle className={styles.infoHeader}>
             Stock Price
           </Card.Subtitle>
-          <Card.Text className={styles.infoBody}>$ </Card.Text>
+          <Card.Text className={styles.infoBody}>$ {props.stock}</Card.Text>
           <Card.Subtitle className={styles.infoHeader}>
             Stock Weighting
           </Card.Subtitle>
@@ -30,6 +30,11 @@ export default function ResultsChild(props) {
             Sentiment/Social Media
           </Card.Subtitle>
           <Card.Text className={styles.infoBody}>Positive</Card.Text>
+          <Card.Title
+            className={props.decision == "BUY" ? styles.buy : styles.sell}
+          >
+            {props.decision}
+          </Card.Title>
         </Card.Body>
       </Card>
     </div>
