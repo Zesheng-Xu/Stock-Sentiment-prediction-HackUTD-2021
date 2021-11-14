@@ -2,9 +2,10 @@ import styles from "../styles/Home.module.css";
 import { db } from "../firebase";
 import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
+import ResultsChild from './ResultsChild'
 
 const initData = {
-  Decision: 0,
+  Decision: "",
   'Sentiment relevance': 0,
   'Sentiment score': 0,
   Stock: 0
@@ -12,55 +13,39 @@ const initData = {
 
 // Get a list of companies from your database
 async function sendTickerToDB(ticker) {
-  var companiesRef = db.ref("companies");
-  // reading data:
-  /*companiesRef.on("value", (snapshot) => {
-    const data = snapshot.val();
-    console.log(data);
-  });*/
-  companiesRef.child(ticker).set(data);
+  var companiesRef = db.ref("companies")
+  companiesRef.child(ticker).set(initData)
+}
+
+async function listenForData(ticker, setData) {
+  var companiesRef = db.ref("companies")
   companiesRef.child(ticker).on('value', (snapshot) => {
-    setData(snapshot.val());
-    console.log(data);
+    setData(snapshot.val())
+    console.log(snapshot.val())
   });
 }
 
-const rec = "BUY";
+
 
 export default function Results(props) {
+
   const [data, setData] = useState(initData)
+
   useEffect(() => {
-    sendTickerToDB(props.ticker);
-  });
+    sendTickerToDB(props.ticker)
+    listenForData(props.ticker, setData)
+    console.log("Called use effect")
+  }, []);
 
   return (
-    <div className={styles.resContainer}>
-      <Card style={{ width: "18rem" }}>
-        <Card.Body>
-          <Card.Title className={styles.nameTicker}>
-            Name/TICKER {props.ticker}
-          </Card.Title>
-          <Card.Title className={rec == "BUY" ? styles.buy : styles.sell}>
-            {rec}
-          </Card.Title>
-          <Card.Subtitle className={styles.infoHeader}>
-            Stock Price
-          </Card.Subtitle>
-          <Card.Text className={styles.infoBody}>$ {data.Stock}</Card.Text>
-          <Card.Subtitle className={styles.infoHeader}>
-            Stock Weighting
-          </Card.Subtitle>
-          <Card.Text className={styles.infoBody}>10</Card.Text>
-          <Card.Subtitle className={styles.infoHeader}>
-            Market Cap
-          </Card.Subtitle>
-          <Card.Text className={styles.infoBody}>1T</Card.Text>
-          <Card.Subtitle className={styles.infoHeader}>
-            Sentiment/Social Media
-          </Card.Subtitle>
-          <Card.Text className={styles.infoBody}>Positive</Card.Text>
-        </Card.Body>
-      </Card>
+    <div>
+      <ResultsChild
+        ticker={props.ticker}
+        decision={data.Decision}
+      />
+
+      {console.log(data)}
     </div>
+
   );
 }

@@ -62,7 +62,7 @@ export default function Home() {
       </form>
 
       {
-        (isResult)? (<Results ticker={ticker}/>) : (<div 
+        (isResult)? (<Results ticker={ticker} />) : (<div 
         className={styles.resContainer}></div>) 
       }
     </div>
