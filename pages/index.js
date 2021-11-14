@@ -11,13 +11,18 @@ import Button from "react-bootstrap/Button"
 
 
 export default function Home() {
-
+  
   const [value, setValue] = useState("")
   const [type, setType] = useState("ticker")
   const [isResult, setResult] = useState(false)
   const [ticker, setTicker] = useState("")
-
+  const [radioValue, setRadioValue] = useState('1')
   
+  const radios = [
+    { name: 'ticker', value: '1' },
+    { name: 'name', value: '2' }
+  ];
+
   const handleSubmit = (evt) => {
     console.log("help");
     evt.preventDefault();
@@ -46,11 +51,13 @@ export default function Home() {
         className={styles.tickerForm}
         onSubmit={handleSubmit}>
         
-        <label htmlFor="searchType">Ticker or Name: </label>
+        {/* <label htmlFor="searchType">Ticker or Name: </label>
         <select name="search" id="searchType" onChange={handleTypeChange}>
          <option value="ticker">Ticker</option>
          <option value="name">Company Name</option>
-        </select>
+        </select> */}
+
+        
 
         <SearchableSelect
           options={
