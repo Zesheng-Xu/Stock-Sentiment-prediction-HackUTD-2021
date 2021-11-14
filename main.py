@@ -1,4 +1,6 @@
-
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 import nltk
 nltk.download('wordnet')
 nltk.download('punkt')
@@ -8,13 +10,15 @@ from GoogleNews import GoogleNews
 import math
 import random
 import pandas as pd
-import Firebase_modules as FM
+
 import datetime as datetime
 from anal import anal_titles
+from stock_process import  stock_process
 
 
 
 
+global eventData
 
 def google_news_search(stock,date):
     date_in = datetime.datetime.strptime(date,"%Y-%m-%d")
@@ -25,7 +29,7 @@ def google_news_search(stock,date):
     googlenews = GoogleNews(start=date_start.strftime("%m/%d/%Y"), end=date_in)
     googlenews.search("\""+stock.upper()+"\"")
     result = googlenews.result()
-    for i in range(2, 5):
+    for i in range(2, 3):
         googlenews.getpage(i)
         result += googlenews.result()
 
@@ -116,34 +120,120 @@ def calculate_weight(senti, media, target):
     return refined_weight, weight_total, most_influencing_factor, most_influencing_media, unique
 
 
+def listener(event):
+    # (event.event_type)  # can be 'put' or 'patch'
+    print(event.path)  # relative to the reference, it seems
+    eventData = event.data  # new data at /reference/event.path
+    print(eventData)
+    print(event.path.strip("/"))
+    if(event.path != "/"):
+        callback(event.path.strip("/"))
 
+
+def set_up():
+
+    ref = db.reference("/")
+    if(ref.get() == None):
+
+            ref = db.reference("/companies")
+            return;
+
+    for item in list:
+        for key,value in ref.get().items():
+                exist = False;
+                for key_2, value_2 in value.items():
+                    print(key_2)
+                    if(key_2==item):
+                        exist = True
+        if not exist:
+            ref.set("/"+item )
+
+
+def to_firebase(name,total_eval ,factor, max_media, final):
+
+    ref = db.reference("companies")
+    decision = ""
+    if(factor * total_eval <= 0):
+
+            decision = "Volatile - Divided"
+    elif total_eval < -0.5 :
+            decision = "Strong Negative"
+    elif total_eval > 0.5:
+            decision = "Strong Positive"
+    else:
+        decision = "No Decisive Opinion"
+    ref.update(
+        {
+            name.upper():
+            {
+
+                  # "Stock": stock_price,
+                  "Total Sentiment score":total_eval,
+                  "Highest Sentiment score from past": factor,
+                  "Corresponding Influencer from past": max_media,
+                  "Predicted Sentiment score from recent": final,
+                  "Total Sentiment Opinion": decision
+            }
+
+                })
+
+def callback(data):
+    if(data.isupper()):
+        date_tosearch, status =stock_process(data);
+        title_train,media_train = google_news_search(data,date_tosearch.strftime("%Y-%m-%d"))
+        title, media = google_news_search(data,datetime.date.today().strftime("%Y-%m-%d"))
+
+        print(title)
+        sentti_train = anal_titles(title_train)
+        sentti_predict = anal_titles(title)
+
+        print("sent rating",(sentti_train))
+        if(status == "Rising"):
+            weight, total_eval, factor, max_media, unique_medias = (calculate_weight(sentti_train, media_train, 0.5))
+        elif(status == "Falling"):
+            weight, total_eval, factor, max_media, unique_medias = (calculate_weight(sentti_train, media_train, -0.5))
+
+        final_sent = 0;
+        for i in range(0, len(sentti_predict)):
+            for x in range(0,len(unique_medias)-1):
+                if media[i] == unique_medias[x]:
+                    final_sent += sentti_predict[i] * weight[x]
+
+
+        print("Total Weighting:", total_eval)
+        print("Weight factors:", weight)
+        print("Most influencing factor:", factor)
+        print("Most influencing Media:", max_media)
+        print("Predicted Sentiment score", final_sent)
+        # parse_yahoo('ALGN')
+
+        to_firebase(data,total_eval ,factor, max_media, final_sent,)
 
 # Press the green button in the gutter to run the script.
 def main():
+    cred = credentials.Certificate('cert.json')
 
-    title_train,media_train = google_news_search("uber",'2014-01-02')
-    title, media = google_news_search("uber",datetime.date.today().strftime("%Y-%m-%d"))
+    # Initialize the app with a service account, granting admin privileges
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://hackutd-viii-2021-default-rtdb.firebaseio.com'
+    })
 
-    sentti_train = anal_titles(title_train)
-    sentti_predict = anal_titles(title)
+    # As an admin, the app has access to read and write all data, regradless of Security Rules
+    ref = db.reference('companies')
+    data = ""
 
-    print("sent rating",(sentti_train))
-    weight, total_eval, factor, max_media, unique_medias = (calculate_weight(sentti_train, media_train, 0.5))
+    try:
+        print(ref.listen(listener))
+        # data = eventData.strip("/")
+        # print("data here:")
+        # print(data)
+    except:
+        SystemError
 
-    final_sent = 0;
-    for i in range(0, len(sentti_predict)):
-        for x in range(0,len(unique_medias)-1):
-            if media[i] == unique_medias[x]:
-                final_sent += sentti_predict[i] * weight[x]
+    while True:
+        1+1
 
 
-    print("Total Weighting:", total_eval)
-    print("Weight factors:", weight)
-    print("Most influencing factor:", factor)
-    print("Most influencing Media:", max_media)
-    print("Predicted Sentiment score", final_sent)
-    # parse_yahoo('ALGN')
-    FM.to_firebase("UBER",810,total_eval ,factor, max_media, final_sent)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 if __name__ == '__main__':

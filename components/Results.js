@@ -5,10 +5,11 @@ import Card from "react-bootstrap/Card";
 import ResultsChild from './ResultsChild'
 
 const initData = {
-  Decision: "",
-  'Sentiment relevance': 0,
-  'Sentiment score': 0,
-  Stock: 0
+  'Corresponding Influencer from past': '',
+  'Highest Sentiment score from past': 0,
+  'Predicted Sentiment score from recent': 0,
+  'Total Sentiment Opinion': '',
+  'Total Sentiment score': 0,
 };
 
 // Get a list of companies from your database
@@ -39,8 +40,11 @@ export default function Results(props) {
     <div>
       <ResultsChild
         ticker={props.ticker}
-        decision={data.Decision}
-        stock={data.Stock}
+        influencer={data['Corresponding Influencer from past']}
+        highsent={data['Highest Sentiment score from past']}
+        predsent={data['Predicted Sentiment score from recent']}
+        opinion={data['Total Sentiment Opinion']}
+        total={data['Total Sentiment score']}
       />
     </div>
 
