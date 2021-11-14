@@ -8,7 +8,7 @@
 }
 
 .resContainer {
-  height: 100vh;
+  margin-top: 3vh;
   display: inline-flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -25,16 +25,24 @@
   width: 50vh;
 }
 
+.nameName {
+  font-size: 2em;
+  text-align: center;
+}
+
 .nameTicker {
+  font-size: 1em;
   text-align: center;
 }
 
 .buy {
+  font-size: 2em;
   text-align: center;
   color: green;
 }
 
 .sell {
+  font-size: 2em;
   text-align: center;
   color: red;
 }

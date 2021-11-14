@@ -58,7 +58,7 @@ export default function Home() {
           }
           handleChange={handleChange}
         />
-        <Button type="submit" variant="info" className={styles.submitButton}>Submit</Button>
+        <Button type="submit" variant="dark" className={styles.submitButton}>Submit</Button>
       </form>
 
       {
